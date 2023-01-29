@@ -1,0 +1,27 @@
+---
+- name: Install OMZ
+  hosts: all
+  become: yes
+  gather_facts: false
+  tasks:
+    - name: Install ZSH
+      apt:
+        name: zsh
+        state: latest  
+    - name: Install OH-MY-ZSH
+      shell:
+        cmd: > 
+           sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+      ignore_errors: yes
+    - name: Git Auto suggestions
+      git:
+        repo: https://github.com/zsh-users/zsh-autosuggestions.git
+        dest: ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+    - name: Git Auto syntax highlighting
+      git:
+        repo: https://github.com/zsh-users/zsh-syntax-highlighting.git
+        dest: ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+    - name: Change Shell root
+      user:
+        name: root
+        shell: /bin/zsh 
